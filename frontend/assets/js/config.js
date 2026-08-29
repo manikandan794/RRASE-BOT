@@ -7,5 +7,5 @@
  * changed to a relative path ("/api/v1") once Nginx proxies /api to FastAPI.
  */
 window.RRASE_CONFIG = {
-  API_BASE_URL: "http://localhost:8000/api/v1",
+  API_BASE_URL: "https://rrase-bot.onrender.com/api/v1",
 };
