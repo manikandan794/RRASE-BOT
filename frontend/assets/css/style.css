@@ -1,0 +1,170 @@
+/* =========================================================
+   RRASE College AI Assistant - Design Tokens & Base Styles
+   Change the CSS variables below to match official branding
+   once the college provides logos / brand colors.
+   ========================================================= */
+
+:root {
+  /* Brand colors - PLACEHOLDER until official branding is supplied */
+  --brand-primary: #1a3c6e;
+  --brand-primary-dark: #122a4d;
+  --brand-accent: #d4a017;
+  --brand-success: #1e7a4c;
+  --brand-danger: #b3261e;
+
+  --surface-bg: #f5f7fa;
+  --surface-card: #ffffff;
+  --surface-border: #e2e6ea;
+
+  --text-primary: #1c1f24;
+  --text-secondary: #5b6572;
+  --text-inverse: #ffffff;
+
+  --font-sans: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--surface-bg);
+  color: var(--text-primary);
+  margin: 0;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--brand-primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Navbar ---------- */
+.rrase-navbar {
+  background: var(--brand-primary);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+.rrase-navbar .navbar-brand {
+  color: var(--text-inverse);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.rrase-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+.rrase-navbar .nav-link:hover,
+.rrase-navbar .nav-link.active {
+  color: var(--text-inverse);
+}
+
+/* ---------- Cards ---------- */
+.rrase-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Hero / landing ---------- */
+.rrase-hero {
+  padding: 4rem 1rem 3rem;
+  text-align: center;
+}
+.rrase-hero h1 {
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  color: var(--brand-primary-dark);
+}
+.rrase-hero p {
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0.75rem auto 0;
+}
+
+/* ---------- Chat UI ---------- */
+.rrase-chat-window {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.rrase-chat-messages {
+  min-height: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.rrase-msg {
+  max-width: 80%;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-md);
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+.rrase-msg-user {
+  align-self: flex-end;
+  background: var(--brand-primary);
+  color: var(--text-inverse);
+  border-bottom-right-radius: 4px;
+}
+.rrase-msg-bot {
+  align-self: flex-start;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-bottom-left-radius: 4px;
+}
+.rrase-msg-source {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.35rem;
+}
+
+.rrase-suggested-chip {
+  border: 1px solid var(--surface-border);
+  background: var(--surface-card);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.rrase-suggested-chip:hover {
+  background: var(--surface-bg);
+}
+
+/* ---------- Status badge (used by the connection check) ---------- */
+.rrase-status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.rrase-status-ok {
+  background: var(--brand-success);
+}
+.rrase-status-down {
+  background: var(--brand-danger);
+}
+
+footer.rrase-footer {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}

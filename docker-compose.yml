@@ -1,0 +1,77 @@
+# Docker Compose configuration for a full self-hosted deployment:
+# PostgreSQL + Ollama (primary AI) + FastAPI backend + Nginx (reverse
+# proxy + static frontend + TLS termination point).
+#
+# Usage:
+#   docker compose up --build
+#   docker compose exec backend python scripts/seed_roles.py
+#   docker compose exec backend alembic upgrade head
+#
+# Gemini needs no container - it's called over the internet directly by
+# the backend when GEMINI_API_KEY is set in backend/.env.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rrase_user
+      POSTGRES_PASSWORD: change_me
+      POSTGRES_DB: rrase_college_ai
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rrase_user -d rrase_college_ai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    # After first `docker compose up`, pull the models once:
+    #   docker compose exec ollama ollama pull llama3.1
+    #   docker compose exec ollama ollama pull nomic-embed-text
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://rrase_user:change_me@postgres:5432/rrase_college_ai
+      OLLAMA_BASE_URL: http://ollama:11434
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./vector_store:/app/vector_store
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      # Mount your TLS certs and switch to 443 for production - see
+      # docs/deployment.md for the full HTTPS + subdomain walkthrough.
+    volumes:
+      - ./deployment/nginx/rrase.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro
+
+volumes:
+  postgres_data:
+  ollama_data:

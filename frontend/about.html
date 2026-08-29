@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About &amp; Roadmap - RRASE College AI Assistant</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg rrase-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><i class="bi bi-mortarboard-fill me-2"></i>RRASE College AI Assistant</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
+          <li class="nav-item"><a class="nav-link active" href="about.html">About / Roadmap</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h1 class="mb-3">Project Status</h1>
+    <p class="text-secondary">
+      Every feature below has working backend code, a database migration,
+      and (where it's meaningfully testable offline) an automated test.
+      Items marked "needs live setup" are fully implemented but require a
+      real environment - a running Ollama install, a PostgreSQL server, or
+      network access to rrase.com - to actually produce answers.
+    </p>
+
+    <h2 class="h4 mt-4">Implemented</h2>
+    <ul>
+      <li>JWT authentication, bcrypt password hashing, role-based access control (Student / Faculty / Admin / Principal)</li>
+      <li>Student self-registration; admin-managed staff (faculty/admin/principal) account creation</li>
+      <li>Full CRUD management for College Info, Departments, Faculty, Courses, FAQs, Notices, Events, Facilities, Contacts</li>
+      <li>PDF upload &rarr; text extraction &rarr; chunking &rarr; embedding &rarr; persistent vector store (Chroma)</li>
+      <li>Official website import &rarr; extract &rarr; clean &rarr; admin/principal review &rarr; approve &rarr; knowledge base</li>
+      <li>AI Provider abstraction: Ollama (primary) &rarr; Gemini (optional fallback) &rarr; graceful "unavailable" - never fabricates college facts</li>
+      <li>Database/FAQ-first chat pipeline with RAG fallback, chat history, thumbs up/down feedback, and unanswered-question logging</li>
+      <li>Admin, Principal, and Faculty dashboards (the Faculty view is read-only by design)</li>
+      <li>Analytics summary, audit logging of every admin/principal action, in-memory rate limiting, upload/file validation</li>
+      <li>Automated tests: auth/RBAC, chunking, and the full chat decision pipeline (with AI calls mocked so tests run offline)</li>
+      <li>Alembic migrations for the entire schema, Docker Compose, an example Nginx config, and HTTPS/subdomain deployment docs</li>
+    </ul>
+
+    <h2 class="h4 mt-4">Needs a live environment to fully activate</h2>
+    <ul>
+      <li><strong>Ollama</strong> must be installed and running with a pulled model (e.g. <code>ollama pull llama3.1</code> and <code>ollama pull nomic-embed-text</code>) for AI-generated answers and embeddings</li>
+      <li><strong>Gemini</strong> fallback only activates if <code>GEMINI_API_KEY</code> is set - it's optional</li>
+      <li><strong>PostgreSQL</strong> must be running and migrated (<code>alembic upgrade head</code>) before the API will serve real data</li>
+      <li><strong>Website import</strong> needs outbound network access to <code>rrase.com</code> from wherever the backend runs</li>
+      <li>Official branding (logo, exact colors) - the current theme is a placeholder until the college supplies brand assets</li>
+    </ul>
+
+    <h2 class="h4 mt-4">Design principles this project follows</h2>
+    <ul>
+      <li>Database/FAQ is always checked before any AI call - the AI is never the first thing asked</li>
+      <li>Website content is never trusted automatically - it sits in a pending queue until a human approves it</li>
+      <li>The AI is always given retrieved context and told to say "I don't know" rather than invent college-specific facts</li>
+      <li>No AI provider is hard-coded into the application logic - swapping or adding providers means writing one class</li>
+    </ul>
+  </div>
+
+  <footer class="rrase-footer">&copy; 2026 RRASE College.</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
