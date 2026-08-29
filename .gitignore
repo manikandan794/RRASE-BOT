@@ -41,7 +41,7 @@ Thumbs.db
 *.gguf
 *.bin
 *.safetensors
-models/
+
 
 # ==== Alembic (keep migrations, ignore local sqlite test artifacts) ====
 *.sqlite3
